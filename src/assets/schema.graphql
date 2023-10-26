@@ -1,0 +1,93 @@
+type Author {
+	contributesToGitRepositories: [GitRepository!]! @relationship(type: "CONTRIBUTES_TO", direction: OUT, properties: "ContributesToProperties")
+	email: String!
+	name: String!
+}
+
+type Component {
+	name: String!
+	nodeProjectsHasComponent: [NodeProject!]! @relationship(type: "HAS_COMPONENT", direction: IN)
+	type: String!
+}
+
+interface ContributesToProperties @relationshipProperties {
+	commits: Float!
+	lastActivity: Date!
+	lineDeletions: Float!
+	lineInsertions: Float!
+	lines: Float!
+	linesChanged: Float!
+}
+
+type Dependency {
+	name: String!
+	nodeProjectsDependsOn: [NodeProject!]! @relationship(type: "DEPENDS_ON", direction: IN, properties: "DependsOnProperties")
+	nodeProjectsPublishes: [NodeProject!]! @relationship(type: "PUBLISHES", direction: IN)
+}
+
+interface DependsOnProperties @relationshipProperties {
+	type: String!
+	version: String!
+}
+
+type GitRepository {
+	authorsContributesTo: [Author!]! @relationship(type: "CONTRIBUTES_TO", direction: IN, properties: "ContributesToProperties")
+	containsNodeProjects: [NodeProject!]! @relationship(type: "CONTAINS", direction: OUT)
+	created_at: Date!
+	default_branch: String!
+	forks_count: Float!
+	http_url_to_repo: String!
+	id: Float!
+	is_fork: Boolean!
+	last_activity_at: Date!
+	name: String!
+	namespace: String!
+	namespace_kind: String!
+	open_issues_count: Float!
+	path: String!
+	ssh_url_to_repo: String!
+	star_count: Float!
+	type: String!
+	visibility: String!
+	web_url: String!
+}
+
+type NodeProject {
+	cognitiveComplexity: Float
+	cssComments: Float
+	cssFiles: Float
+	cssLines: Float
+	cyclomaticComplexity: Float
+	dependsOnDependencies: [Dependency!]! @relationship(type: "DEPENDS_ON", direction: OUT, properties: "DependsOnProperties")
+	directorySize: Float!
+	files: Float
+	gitRepositoriesContains: [GitRepository!]! @relationship(type: "CONTAINS", direction: IN)
+	hasComponentComponents: [Component!]! @relationship(type: "HAS_COMPONENT", direction: OUT)
+	hasNodeModules: String
+	htmlComments: Float
+	htmlFiles: Float
+	htmlLines: Float
+	id: String!
+	jsComments: Float
+	jsFiles: Float
+	jsLines: Float
+	linesOfCode: Float
+	mdComments: Float
+	mdFiles: Float
+	mdLines: Float
+	methods: Float
+	name: String!
+	packageJson: String!
+	projectTypes: [String]!
+	publishesDependencies: [Dependency!]! @relationship(type: "PUBLISHES", direction: OUT)
+	pumlComments: Float
+	pumlFiles: Float
+	pumlLines: Float
+	scssComments: Float
+	scssFiles: Float
+	scssLines: Float
+	srcFolder: String
+	tsComments: Float
+	tsFiles: Float
+	tsLines: Float
+}

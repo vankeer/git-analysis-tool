@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  neo4j:
+    image: neo4j:4.4.3-community
+    container_name: neo4j_container
+    ports:
+      - '7474:7474' # HTTP
+      - '7687:7687' # Bolt
+    volumes:
+      - ./neo4j/conf:/conf
+      - ./neo4j/data:/data
+      - ./neo4j/import:/import
+      - ./neo4j/logs:/logs
+      - ./neo4j/plugins:/plugins
+    environment:
+      - NEO4J_AUTH=neo4j/changeme
+      - NEO4J_dbms.memory.heap.initial_size=8G
+      - NEO4J_dbms_memory_heap_max__size=12G \
+      - NEO4J_dbms_memory_pagecache_size=2G \
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_apoc_import_file_use__neo4j__config=true
+
+  redis:
+    image: redis:latest
+    container_name: redis_container
+    ports:
+      - '6379:6379'
+    volumes:
+      - ./redis_data:/data
